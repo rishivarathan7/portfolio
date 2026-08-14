@@ -1,0 +1,1048 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cricket Score Card</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #07111f;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* HEADER */
+
+header {
+    background: #087f5b;
+    padding: 25px;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+}
+
+header h1 {
+    font-size: 35px;
+}
+
+header p {
+    margin-top: 8px;
+    color: #d8f3dc;
+}
+
+/* SETUP */
+
+.setup {
+    background: #111c2e;
+    padding: 25px;
+    margin-top: 2px;
+}
+
+.setup h2 {
+    color: #00d4ff;
+    margin-bottom: 20px;
+}
+
+.setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 7px;
+    border: none;
+    margin-top: 5px;
+}
+
+label {
+    color: #bbb;
+}
+
+.custom-over {
+    display: none;
+}
+
+/* MATCH INFO */
+
+.match-info {
+    background: #152238;
+    padding: 20px;
+    text-align: center;
+}
+
+.match-info h2 {
+    color: #ffd43b;
+}
+
+/* SCORE */
+
+.score-card {
+    background: #101a2b;
+    padding: 30px;
+    text-align: center;
+}
+
+.innings-title {
+    font-size: 25px;
+    color: #00d4ff;
+    margin-bottom: 10px;
+}
+
+.team {
+    font-size: 30px;
+    color: #ffd43b;
+}
+
+.score {
+    font-size: 65px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.overs {
+    color: #bbb;
+    font-size: 20px;
+}
+
+.target {
+    margin-top: 15px;
+    color: #ffec99;
+}
+
+/* PLAYERS */
+
+.players {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.player-box {
+    background: #1b2a40;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.player-box h3 {
+    color: #00d4ff;
+    margin-bottom: 10px;
+}
+
+/* CONTROLS */
+
+.controls {
+    background: #111c2e;
+    padding: 25px;
+}
+
+.controls h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 14px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    background: #087f5b;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #0ca678;
+}
+
+.wicket {
+    background: #d62828;
+}
+
+.wicket:hover {
+    background: #e03131;
+}
+
+.next {
+    background: #1971c2;
+}
+
+.next:hover {
+    background: #228be6;
+}
+
+.reset {
+    background: #495057;
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* INNINGS TABLE */
+
+.score-table {
+    background: #111c2e;
+    padding: 25px;
+    margin-top: 2px;
+}
+
+.score-table h2 {
+    color: #00d4ff;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #344054;
+    text-align: center;
+}
+
+th {
+    color: #ffd43b;
+}
+
+/* RESULT */
+
+.result {
+    background: #087f5b;
+    padding: 25px;
+    text-align: center;
+    font-size: 22px;
+    display: none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:700px) {
+
+    .setup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .players {
+        grid-template-columns: 1fr;
+    }
+
+    .buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .score {
+        font-size: 50px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<header>
+
+<h1>🏏 CRICKET SCORE CARD</h1>
+
+<p>T20 • ODI • Custom Overs</p>
+
+</header>
+
+
+<!-- MATCH SETUP -->
+
+<div class="setup">
+
+<h2>⚙ Match Setup</h2>
+
+<div class="setup-grid">
+
+<div>
+
+<label>Team 1</label>
+
+<input type="text" id="team1" value="India">
+
+</div>
+
+
+<div>
+
+<label>Team 2</label>
+
+<input type="text" id="team2" value="Australia">
+
+</div>
+
+
+<div>
+
+<label>Match Format</label>
+
+<select id="format" onchange="changeFormat()">
+
+<option value="20">T20 - 20 Overs</option>
+
+<option value="50">ODI - 50 Overs</option>
+
+<option value="custom">Custom Overs</option>
+
+</select>
+
+</div>
+
+
+<div class="custom-over" id="customBox">
+
+<label>Enter Overs</label>
+
+<input type="number" id="customOvers" value="10" min="1">
+
+</div>
+
+</div>
+
+
+<button onclick="startMatch()" style="margin-top:20px; width:100%;">
+START MATCH
+</button>
+
+</div>
+
+
+<!-- MATCH INFORMATION -->
+
+<div class="match-info">
+
+<h2 id="formatDisplay">T20</h2>
+
+<p id="oversLimit">20 Overs</p>
+
+</div>
+
+
+<!-- SCORE CARD -->
+
+<div class="score-card">
+
+<div class="innings-title" id="inningsTitle">
+1st INNINGS
+</div>
+
+<div class="team" id="teamDisplay">
+India
+</div>
+
+<div class="score">
+
+<span id="runs">0</span> /
+
+<span id="wickets">0</span>
+
+</div>
+
+<div class="overs">
+
+Overs:
+<span id="overs">0.0</span>
+/
+<span id="maxOvers">20</span>
+
+</div>
+
+<div class="target" id="targetText"></div>
+
+
+<div class="players">
+
+<div class="player-box">
+
+<h3>🏏 Batsman</h3>
+
+<p id="batsman">
+Batsman
+</p>
+
+<p>
+Runs: <span id="batsmanRuns">0</span>
+</p>
+
+<p>
+Balls: <span id="batsmanBalls">0</span>
+</p>
+
+</div>
+
+
+<div class="player-box">
+
+<h3>⚡ Bowler</h3>
+
+<p id="bowler">
+Bowler
+</p>
+
+<p>
+Overs: <span id="bowlerOvers">0.0</span>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CONTROLS -->
+
+<div class="controls">
+
+<h2>Update Score</h2>
+
+<div class="buttons">
+
+<button onclick="addRuns(1)">
++1
+</button>
+
+<button onclick="addRuns(2)">
++2
+</button>
+
+<button onclick="addRuns(3)">
++3
+</button>
+
+<button onclick="addRuns(4)">
++4
+</button>
+
+<button onclick="addRuns(6)">
++6
+</button>
+
+<button onclick="addWide()">
+WIDE
+</button>
+
+<button onclick="addNoBall()">
+NO BALL
+</button>
+
+<button class="wicket" onclick="addWicket()">
+WICKET
+</button>
+
+<button class="next" onclick="nextInnings()">
+NEXT INNINGS
+</button>
+
+</div>
+
+<button class="reset" onclick="resetMatch()">
+RESET MATCH
+</button>
+
+</div>
+
+
+<!-- SCORE SUMMARY -->
+
+<div class="score-table">
+
+<h2>📊 Innings Summary</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Innings</th>
+<th>Team</th>
+<th>Score</th>
+<th>Overs</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>1st</td>
+
+<td id="summaryTeam1">
+India
+</td>
+
+<td id="summaryScore1">
+0/0
+</td>
+
+<td id="summaryOvers1">
+0.0
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>2nd</td>
+
+<td id="summaryTeam2">
+Australia
+</td>
+
+<td id="summaryScore2">
+0/0
+</td>
+
+<td id="summaryOvers2">
+0.0
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div class="result" id="result">
+
+Match Result
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* MATCH VARIABLES */
+
+let currentInnings = 1;
+
+let runs = 0;
+
+let wickets = 0;
+
+let balls = 0;
+
+let batsmanRuns = 0;
+
+let batsmanBalls = 0;
+
+let maxOvers = 20;
+
+let target = 0;
+
+let innings1Runs = 0;
+
+let innings1Wickets = 0;
+
+let innings1Balls = 0;
+
+let innings2Runs = 0;
+
+let innings2Wickets = 0;
+
+let innings2Balls = 0;
+
+
+/* FORMAT */
+
+function changeFormat() {
+
+    let format =
+        document.getElementById("format").value;
+
+    let customBox =
+        document.getElementById("customBox");
+
+    if(format === "custom") {
+
+        customBox.style.display = "block";
+
+    } else {
+
+        customBox.style.display = "none";
+
+    }
+
+}
+
+
+/* START MATCH */
+
+function startMatch() {
+
+    let team1 =
+        document.getElementById("team1").value;
+
+    let team2 =
+        document.getElementById("team2").value;
+
+    let format =
+        document.getElementById("format").value;
+
+
+    if(format === "custom") {
+
+        maxOvers =
+            parseInt(
+                document.getElementById("customOvers").value
+            );
+
+    } else {
+
+        maxOvers =
+            parseInt(format);
+
+    }
+
+
+    document.getElementById("formatDisplay").innerText =
+        format === "20"
+        ? "T20"
+        : format === "50"
+        ? "ODI"
+        : "CUSTOM";
+
+
+    document.getElementById("oversLimit").innerText =
+        maxOvers + " Overs";
+
+
+    document.getElementById("maxOvers").innerText =
+        maxOvers;
+
+
+    document.getElementById("summaryTeam1").innerText =
+        team1;
+
+    document.getElementById("summaryTeam2").innerText =
+        team2;
+
+
+    resetValues();
+
+    updateDisplay();
+
+}
+
+
+/* ADD RUNS */
+
+function addRuns(value) {
+
+    if(wickets >= 10) return;
+
+    if(currentInnings === 2 &&
+       runs >= target) {
+
+        finishMatch();
+
+        return;
+
+    }
+
+
+    runs += value;
+
+    batsmanRuns += value;
+
+    balls++;
+
+    batsmanBalls++;
+
+    checkMatch();
+
+    updateDisplay();
+
+}
+
+
+/* WIDE */
+
+function addWide() {
+
+    runs++;
+
+    updateDisplay();
+
+}
+
+
+/* NO BALL */
+
+function addNoBall() {
+
+    runs++;
+
+    batsmanRuns++;
+
+    updateDisplay();
+
+}
+
+
+/* WICKET */
+
+function addWicket() {
+
+    if(wickets >= 10) return;
+
+    wickets++;
+
+    balls++;
+
+    batsmanBalls++;
+
+    checkMatch();
+
+    updateDisplay();
+
+}
+
+
+/* CHECK MATCH */
+
+function checkMatch() {
+
+    let maxBalls =
+        maxOvers * 6;
+
+
+    if(currentInnings === 1) {
+
+        if(balls >= maxBalls ||
+           wickets >= 10) {
+
+            saveFirstInnings();
+
+        }
+
+    } else {
+
+        if(runs >= target) {
+
+            finishMatch();
+
+        }
+
+        else if(
+            balls >= maxBalls ||
+            wickets >= 10
+        ) {
+
+            finishMatch();
+
+        }
+
+    }
+
+}
+
+
+/* SAVE FIRST INNINGS */
+
+function saveFirstInnings() {
+
+    innings1Runs = runs;
+
+    innings1Wickets = wickets;
+
+    innings1Balls = balls;
+
+    target = innings1Runs + 1;
+
+    document.getElementById("targetText").innerText =
+        "Target for 2nd Innings: " + target;
+
+}
+
+
+/* NEXT INNINGS */
+
+function nextInnings() {
+
+    if(currentInnings === 2) {
+
+        finishMatch();
+
+        return;
+
+    }
+
+
+    saveFirstInnings();
+
+    currentInnings = 2;
+
+    runs = 0;
+
+    wickets = 0;
+
+    balls = 0;
+
+    batsmanRuns = 0;
+
+    batsmanBalls = 0;
+
+
+    document.getElementById("inningsTitle").innerText =
+        "2nd INNINGS";
+
+
+    document.getElementById("teamDisplay").innerText =
+        document.getElementById("team2").value;
+
+
+    document.getElementById("targetText").innerText =
+        "Target: " + target;
+
+
+    updateDisplay();
+
+}
+
+
+/* FINISH MATCH */
+
+function finishMatch() {
+
+    if(currentInnings === 1) {
+
+        saveFirstInnings();
+
+        return;
+
+    }
+
+
+    innings2Runs = runs;
+
+    innings2Wickets = wickets;
+
+    innings2Balls = balls;
+
+
+    let team1 =
+        document.getElementById("team1").value;
+
+    let team2 =
+        document.getElementById("team2").value;
+
+
+    let result =
+        document.getElementById("result");
+
+
+    if(innings2Runs >= target) {
+
+        let margin =
+            10 - innings2Wickets;
+
+        result.innerText =
+            team2 + " won by " +
+            margin + " wickets 🏆";
+
+    }
+
+    else if(innings2Runs === innings1Runs) {
+
+        result.innerText =
+            "Match Tied 🤝";
+
+    }
+
+    else {
+
+        let margin =
+            innings1Runs - innings2Runs;
+
+        result.innerText =
+            team1 + " won by " +
+            margin + " runs 🏆";
+
+    }
+
+
+    result.style.display = "block";
+
+    updateDisplay();
+
+}
+
+
+/* UPDATE DISPLAY */
+
+function updateDisplay() {
+
+    document.getElementById("runs").innerText =
+        runs;
+
+    document.getElementById("wickets").innerText =
+        wickets;
+
+
+    let completedOvers =
+        Math.floor(balls / 6);
+
+    let remainingBalls =
+        balls % 6;
+
+
+    let overText =
+        completedOvers + "." + remainingBalls;
+
+
+    document.getElementById("overs").innerText =
+        overText;
+
+
+    document.getElementById("batsmanRuns").innerText =
+        batsmanRuns;
+
+
+    document.getElementById("batsmanBalls").innerText =
+        batsmanBalls;
+
+
+    document.getElementById("bowlerOvers").innerText =
+        overText;
+
+
+    if(currentInnings === 1) {
+
+        document.getElementById("summaryScore1").innerText =
+            runs + "/" + wickets;
+
+        document.getElementById("summaryOvers1").innerText =
+            overText;
+
+    } else {
+
+        document.getElementById("summaryScore2").innerText =
+            runs + "/" + wickets;
+
+        document.getElementById("summaryOvers2").innerText =
+            overText;
+
+    }
+
+}
+
+
+/* RESET VALUES */
+
+function resetValues() {
+
+    currentInnings = 1;
+
+    runs = 0;
+
+    wickets = 0;
+
+    balls = 0;
+
+    batsmanRuns = 0;
+
+    batsmanBalls = 0;
+
+    target = 0;
+
+    innings1Runs = 0;
+
+    innings1Wickets = 0;
+
+    innings1Balls = 0;
+
+    innings2Runs = 0;
+
+    innings2Wickets = 0;
+
+    innings2Balls = 0;
+
+
+    document.getElementById("inningsTitle").innerText =
+        "1st INNINGS";
+
+
+    document.getElementById("teamDisplay").innerText =
+        document.getElementById("team1").value;
+
+
+    document.getElementById("targetText").innerText = "";
+
+    document.getElementById("result").style.display =
+        "none";
+
+
+    updateDisplay();
+
+}
+
+
+/* RESET MATCH */
+
+function resetMatch() {
+
+    resetValues();
+
+    document.getElementById("summaryScore1").innerText =
+        "0/0";
+
+    document.getElementById("summaryScore2").innerText =
+        "0/0";
+
+    document.getElementById("summaryOvers1").innerText =
+        "0.0";
+
+    document.getElementById("summaryOvers2").innerText =
+        "0.0";
+
+}
+
+</script>
+
+</body>
+</html>
+```
